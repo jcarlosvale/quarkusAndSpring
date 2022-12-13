@@ -1,7 +1,6 @@
 package com.study;
 
 import com.study.dto.CorDto;
-import org.jboss.resteasy.annotations.Body;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,7 +80,7 @@ public class GreetingResource {
             cores.put(cor.getId(), cor);
             log.info("Inserted a new color {}", cor);
             return Response
-                    .ok(cor)
+                    .status(Response.Status.CREATED)
                     .build();
         }
     }

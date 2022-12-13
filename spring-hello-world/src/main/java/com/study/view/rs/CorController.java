@@ -2,6 +2,7 @@ package com.study.view.rs;
 
 import com.study.dto.CorDto;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -66,7 +67,8 @@ public class CorController {
             cores.put(cor.getId(), cor);
             log.info("Inserted a new color {}", cor);
             return ResponseEntity
-                    .ok(cor);
+                    .status(HttpStatus.CREATED)
+                    .body(cor);
         }
     }
 
