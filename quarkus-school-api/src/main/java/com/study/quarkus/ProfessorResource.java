@@ -1,43 +1,59 @@
 package com.study.quarkus;
 
 import com.study.quarkus.dto.ProfessorDto;
-import lombok.extern.slf4j.Slf4j;
+import com.study.quarkus.service.ProfessorService;
 
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
-@Slf4j
 @Path("/professores")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class ProfessorResource {
 
+    private final ProfessorService service;
+
+    @Inject
+    public ProfessorResource(ProfessorService service) {
+        this.service = service;
+    }
+
+
     @GET
     public Response listProfessors() {
-        log.info("Listing professors");
-        return Response.ok().build();
+        final List<ProfessorDto> professorDtoList = service.retrieveAll();
+
+        return Response.ok(professorDtoList).build();
     }
 
     @GET
     @Path("/{id}")
     public Response getProfessor(@PathParam("id") int id) {
-        log.info("Getting professor id-{}", id);
-        return Response.ok().build();
+
+        final ProfessorDto professorDto = service.getById(id);
+
+        return Response.ok(professorDto).build();
     }
 
     @POST
     public Response saveProfessor(final ProfessorDto professor) {
-        log.info("Saving professor - {}", professor);
-            return Response
-                    .status(Response.Status.CREATED)
-                    .build();
+
+        service.save(professor);
+
+        return Response
+                .status(Response.Status.CREATED)
+                .build();
     }
 
     @PUT
     @Path("/{id}")
     public Response updateProfessor(@PathParam("id") int id, ProfessorDto professor) {
-        log.info("Updating professor id - {}", id);
+
+        service.update(id, professor);
+
         return Response
                 .ok(professor)
                 .build();
@@ -46,7 +62,9 @@ public class ProfessorResource {
     @DELETE
     @Path("/{id}")
     public Response removeProfessor(@PathParam("id") int id) {
-        log.info("Deleting professor id - {}", id);
+
+        service.delete(id);
+
         return Response
                 .status(Response.Status.NO_CONTENT)
                 .build();
