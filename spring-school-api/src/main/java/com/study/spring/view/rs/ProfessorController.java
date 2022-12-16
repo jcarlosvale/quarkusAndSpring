@@ -32,7 +32,7 @@ public class ProfessorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProfessorDto> updateProfessor(@PathVariable("id") int id, ProfessorDto professor) {
+    public ResponseEntity<ProfessorDto> updateProfessor(@PathVariable("id") int id, @RequestBody ProfessorDto professor) {
         log.info("Updating professor id - {}", id);
         return ResponseEntity
                 .ok(professor);
