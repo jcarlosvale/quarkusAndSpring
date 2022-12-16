@@ -4,7 +4,7 @@ import com.study.quarkus.dto.ProfessorRequest;
 import com.study.quarkus.dto.ProfessorResponse;
 import com.study.quarkus.mapper.ProfessorMapper;
 import com.study.quarkus.model.Professor;
-import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
+import com.study.quarkus.repository.ProfessorRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,17 +19,18 @@ import java.util.Optional;
 public class ProfessorService {
 
     private final ProfessorMapper mapper;
+    private final ProfessorRepository repository;
 
     public List<ProfessorResponse> retrieveAll() {
         log.info("Listing professors");
-        final List<Professor> listOfProfessors = Professor.listAll();
+        final List<Professor> listOfProfessors = repository.listAll();
         return  mapper.toResponse(listOfProfessors);
     }
 
     public ProfessorResponse getById(int id) {
         log.info("Getting professor id-{}", id);
 
-        Professor professor = Professor.findById(id);
+        Professor professor = repository.findById(id);
         return mapper.toResponse(professor);
     }
 
@@ -43,7 +44,7 @@ public class ProfessorService {
                 .name(professorRequest.getName())
                 .build();
 
-        professor.persistAndFlush();
+        repository.persistAndFlush(professor);
 
         return professor;
     }
@@ -53,12 +54,11 @@ public class ProfessorService {
 
         log.info("Updating professor id - {}, data - {}", id, professorRequest);
 
-        Optional<Professor> professor = Professor.findByIdOptional(id);
+        Optional<Professor> professor = repository.findByIdOptional(id);
 
         if (professor.isPresent()) {
             var entity = professor.get();
             entity.setName(professorRequest.getName());
-            entity.persistAndFlush();
             return mapper.toResponse(entity);
         }
 
@@ -68,6 +68,7 @@ public class ProfessorService {
     @Transactional
     public void delete(int id) {
         log.info("Deleting professor id - {}", id);
-        Professor.findByIdOptional(id).ifPresent(PanacheEntityBase::delete);
+        Optional<Professor> professor = repository.findByIdOptional(id);
+        professor.ifPresent(repository::delete);
     }
 }
