@@ -50,7 +50,7 @@ public class ProfessorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProfessorResponse> updateProfessor(@PathVariable("id") int id, ProfessorRequest professor) {
+    public ResponseEntity<ProfessorResponse> updateProfessor(@PathVariable("id") int id, @RequestBody ProfessorRequest professor) {
 
         var response = service.update(id, professor);
 

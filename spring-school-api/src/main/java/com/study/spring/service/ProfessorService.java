@@ -50,8 +50,9 @@ public class ProfessorService {
         var optionalProfessor = repository.findById(id);
 
         if (optionalProfessor.isPresent()) {
-            Professor entity = repository.saveAndFlush(mapper.toEntity(request));
-
+            Professor entity = optionalProfessor.get();
+            entity.setName(request.getName());
+            repository.save(entity);
             return mapper.toResponse(entity);
         }
 
