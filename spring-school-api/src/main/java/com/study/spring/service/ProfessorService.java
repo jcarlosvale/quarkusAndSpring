@@ -1,39 +1,67 @@
 package com.study.spring.service;
 
-import com.study.spring.dto.ProfessorDto;
+import com.study.spring.dto.ProfessorRequest;
+import com.study.spring.dto.ProfessorResponse;
+import com.study.spring.entity.Professor;
+import com.study.spring.mapper.ProfessorMapper;
+import com.study.spring.repository.ProfessorRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
+@RequiredArgsConstructor
 @Slf4j
 public class ProfessorService {
 
-    public List<ProfessorDto> retrieveAll() {
+    private final ProfessorRepository repository;
+    private final ProfessorMapper mapper;
+
+
+    public List<ProfessorResponse> retrieveAll() {
         log.info("Listing professors");
-        return List.of(new ProfessorDto(1, "Joao"), ProfessorDto.builder().id(2).name("Maria").build());
+        return mapper.toResponse(repository.findAll());
     }
 
-    public ProfessorDto getById(int id) {
+    public ProfessorResponse getById(int id) {
         log.info("Getting professor id-{}", id);
 
-        return ProfessorDto.builder()
-                .id(id)
-                .name("Name of professor")
-                .build();
+        var optionalProfessor = repository.findById(id);
+
+        if (optionalProfessor.isPresent()) {
+            return mapper.toResponse(optionalProfessor.get());
+        }
+
+        return new ProfessorResponse();
     }
 
-    public void save(ProfessorDto professor) {
-        log.info("Saving professor - {}", professor);
+    public void save(ProfessorRequest request) {
+        log.info("Saving professor - {}", request);
+
+        if (Objects.nonNull(request)) repository.saveAndFlush(mapper.toEntity(request));
     }
 
-    public void update(int id, ProfessorDto professor) {
-        log.info("Updating professor id - {}, data - {}", id, professor);
+    public ProfessorResponse update(int id, ProfessorRequest request) {
+        log.info("Updating professor id - {}, data - {}", id, request);
+
+        var optionalProfessor = repository.findById(id);
+
+        if (optionalProfessor.isPresent()) {
+            Professor entity = repository.saveAndFlush(mapper.toEntity(request));
+
+            return mapper.toResponse(entity);
+        }
+
+        return null;
     }
 
     public void delete(int id) {
+
         log.info("Deleting professor id - {}", id);
+        repository.deleteById(id);
     }
 
 }
