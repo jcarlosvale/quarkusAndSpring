@@ -9,8 +9,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @ApplicationScoped
@@ -35,7 +38,9 @@ public class ProfessorService {
     }
 
     @Transactional
-    public Professor save(ProfessorRequest professorRequest) {
+    public Professor save(@Valid ProfessorRequest professorRequest) {
+
+        Objects.requireNonNull(professorRequest, "request must not be null");
 
         log.info("Saving professor - {}", professorRequest);
 
@@ -50,19 +55,19 @@ public class ProfessorService {
     }
 
     @Transactional
-    public ProfessorResponse update(int id, ProfessorRequest professorRequest) {
+    public ProfessorResponse update(int id, @Valid ProfessorRequest professorRequest) {
+
+        Objects.requireNonNull(professorRequest, "request must not be null");
 
         log.info("Updating professor id - {}, data - {}", id, professorRequest);
 
         Optional<Professor> professor = repository.findByIdOptional(id);
 
-        if (professor.isPresent()) {
-            var entity = professor.get();
-            entity.setName(professorRequest.getName());
-            return mapper.toResponse(entity);
-        }
+        professor.orElseThrow(() -> new EntityNotFoundException("Professor not found."));
 
-        return new ProfessorResponse();
+        var entity = professor.get();
+        entity.setName(professorRequest.getName());
+        return mapper.toResponse(entity);
     }
 
     @Transactional

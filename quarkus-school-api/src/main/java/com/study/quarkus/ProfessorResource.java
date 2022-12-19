@@ -1,9 +1,11 @@
 package com.study.quarkus;
 
+import com.study.quarkus.dto.ErrorResponse;
 import com.study.quarkus.dto.ProfessorRequest;
 import com.study.quarkus.service.ProfessorService;
+import lombok.RequiredArgsConstructor;
 
-import javax.inject.Inject;
+import javax.validation.ConstraintViolationException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -11,15 +13,10 @@ import javax.ws.rs.core.Response;
 @Path("/professores")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@RequiredArgsConstructor
 public class ProfessorResource {
 
     private final ProfessorService service;
-
-    @Inject
-    public ProfessorResource(ProfessorService service) {
-        this.service = service;
-    }
-
 
     @GET
     public Response listProfessors() {
@@ -39,24 +36,40 @@ public class ProfessorResource {
 
     @POST
     public Response saveProfessor(final ProfessorRequest professor) {
+        try {
+            final var response = service.save(professor);
 
-        final var response = service.save(professor);
+            return Response
+                    .status(Response.Status.CREATED)
+                    .entity(response)
+                    .build();
 
-        return Response
-                .status(Response.Status.CREATED)
-                .entity(response)
-                .build();
+        } catch(ConstraintViolationException e) {
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(ErrorResponse.createFromValidation(e))
+                    .build();
+        }
     }
 
     @PUT
     @Path("/{id}")
     public Response updateProfessor(@PathParam("id") int id, ProfessorRequest professor) {
 
-        var response = service.update(id, professor);
+        try {
 
-        return Response
-                .ok(response)
-                .build();
+            var response = service.update(id, professor);
+
+            return Response
+                    .ok(response)
+                    .build();
+
+        } catch(ConstraintViolationException e) {
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(ErrorResponse.createFromValidation(e))
+                    .build();
+        }
     }
 
     @DELETE
