@@ -38,20 +38,20 @@ public class ProfessorService {
     }
 
     @Transactional
-    public Professor save(@Valid ProfessorRequest professorRequest) {
+    public ProfessorResponse save(@Valid ProfessorRequest professorRequest) {
 
         Objects.requireNonNull(professorRequest, "request must not be null");
 
         log.info("Saving professor - {}", professorRequest);
 
-        Professor professor =
+        Professor entity =
                 Professor.builder()
                 .name(professorRequest.getName())
                 .build();
 
-        repository.persistAndFlush(professor);
+        repository.persistAndFlush(entity);
 
-        return professor;
+        return mapper.toResponse(entity);
     }
 
     @Transactional
