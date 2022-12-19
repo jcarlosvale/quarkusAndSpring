@@ -15,17 +15,16 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "PROFESSORES")
-public class Professor {
-
+@Table(name = "ALUNOS")
+public class Aluno {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "professor_id")
+    @Column(name = "aluno_id")
     private Integer id;
 
     @NotBlank(message = "Name must be not empty or null")
     @Size(min = 4, message = "Minimum name length 4 characters")
-    @Column(name = "professor_name", nullable = false)
+    @Column(name = "aluno_name", nullable = false)
     private String name;
 
     @Column(name="data_atualizacao", nullable = false)
@@ -35,5 +34,4 @@ public class Professor {
     public void prePersist(){
         setDateTime(LocalDateTime.now());
     }
-
 }
