@@ -1,13 +1,12 @@
 package com.study.quarkus;
 
-import com.study.quarkus.dto.ProfessorDto;
+import com.study.quarkus.dto.ProfessorRequest;
 import com.study.quarkus.service.ProfessorService;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.List;
 
 @Path("/professores")
 @Produces(MediaType.APPLICATION_JSON)
@@ -24,38 +23,39 @@ public class ProfessorResource {
 
     @GET
     public Response listProfessors() {
-        final List<ProfessorDto> professorDtoList = service.retrieveAll();
+        final var response = service.retrieveAll();
 
-        return Response.ok(professorDtoList).build();
+        return Response.ok(response).build();
     }
 
     @GET
     @Path("/{id}")
     public Response getProfessor(@PathParam("id") int id) {
 
-        final ProfessorDto professorDto = service.getById(id);
+        final var response = service.getById(id);
 
-        return Response.ok(professorDto).build();
+        return Response.ok(response).build();
     }
 
     @POST
-    public Response saveProfessor(final ProfessorDto professor) {
+    public Response saveProfessor(final ProfessorRequest professor) {
 
-        service.save(professor);
+        final var response = service.save(professor);
 
         return Response
                 .status(Response.Status.CREATED)
+                .entity(response)
                 .build();
     }
 
     @PUT
     @Path("/{id}")
-    public Response updateProfessor(@PathParam("id") int id, ProfessorDto professor) {
+    public Response updateProfessor(@PathParam("id") int id, ProfessorRequest professor) {
 
-        service.update(id, professor);
+        var response = service.update(id, professor);
 
         return Response
-                .ok(professor)
+                .ok(response)
                 .build();
     }
 

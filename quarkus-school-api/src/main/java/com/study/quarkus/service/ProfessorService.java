@@ -1,38 +1,73 @@
 package com.study.quarkus.service;
 
-import com.study.quarkus.dto.ProfessorDto;
+import com.study.quarkus.dto.ProfessorRequest;
+import com.study.quarkus.dto.ProfessorResponse;
+import com.study.quarkus.mapper.ProfessorMapper;
+import com.study.quarkus.model.Professor;
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @ApplicationScoped
 @Slf4j
+@RequiredArgsConstructor
 public class ProfessorService {
 
-    public List<ProfessorDto> retrieveAll() {
+    private final ProfessorMapper mapper;
+
+    public List<ProfessorResponse> retrieveAll() {
         log.info("Listing professors");
-        return List.of(new ProfessorDto(1, "Joao"), ProfessorDto.builder().id(2).name("Maria").build());
+        final List<Professor> listOfProfessors = Professor.listAll();
+        return  mapper.toResponse(listOfProfessors);
     }
 
-    public ProfessorDto getById(int id) {
+    public ProfessorResponse getById(int id) {
         log.info("Getting professor id-{}", id);
 
-        return ProfessorDto.builder()
-                .id(id)
-                .name("Name of professor")
+        Professor professor = Professor.findById(id);
+        return mapper.toResponse(professor);
+    }
+
+    @Transactional
+    public ProfessorResponse save(ProfessorRequest professorRequest) {
+
+        log.info("Saving professor - {}", professorRequest);
+
+        Professor entity =
+                Professor.builder()
+                .name(professorRequest.getName())
                 .build();
+
+        entity.persistAndFlush();
+
+        return mapper.toResponse(entity);
     }
 
-    public void save(ProfessorDto professor) {
-        log.info("Saving professor - {}", professor);
+    @Transactional
+    public ProfessorResponse update(int id, ProfessorRequest professorRequest) {
+
+        log.info("Updating professor id - {}, data - {}", id, professorRequest);
+
+        Optional<Professor> professor = Professor.findByIdOptional(id);
+
+        if (professor.isPresent()) {
+            var entity = professor.get();
+            entity.setName(professorRequest.getName());
+            entity.persistAndFlush();
+            return mapper.toResponse(entity);
+        }
+
+        return new ProfessorResponse();
     }
 
-    public void update(int id, ProfessorDto professor) {
-        log.info("Updating professor id - {}, data - {}", id, professor);
-    }
-
+    @Transactional
     public void delete(int id) {
         log.info("Deleting professor id - {}", id);
+        Professor.findByIdOptional(id).ifPresent(PanacheEntityBase::delete);
     }
 }
