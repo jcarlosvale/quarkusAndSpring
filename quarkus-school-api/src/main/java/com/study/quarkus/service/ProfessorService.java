@@ -34,18 +34,18 @@ public class ProfessorService {
     }
 
     @Transactional
-    public Professor save(ProfessorRequest professorRequest) {
+    public ProfessorResponse save(ProfessorRequest professorRequest) {
 
         log.info("Saving professor - {}", professorRequest);
 
-        Professor professor =
+        Professor entity =
                 Professor.builder()
                 .name(professorRequest.getName())
                 .build();
 
-        professor.persistAndFlush();
+        entity.persistAndFlush();
 
-        return professor;
+        return mapper.toResponse(entity);
     }
 
     @Transactional
