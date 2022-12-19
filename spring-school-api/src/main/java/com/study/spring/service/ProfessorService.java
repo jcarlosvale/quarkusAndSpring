@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Objects;
 
@@ -39,24 +40,27 @@ public class ProfessorService {
     }
 
     public void save(ProfessorRequest request) {
+
+        Objects.requireNonNull(request, "request must not be null");
+
         log.info("Saving professor - {}", request);
 
         if (Objects.nonNull(request)) repository.saveAndFlush(mapper.toEntity(request));
     }
 
     public ProfessorResponse update(int id, ProfessorRequest request) {
+        Objects.requireNonNull(request, "request must not be null");
+
         log.info("Updating professor id - {}, data - {}", id, request);
 
         var optionalProfessor = repository.findById(id);
 
-        if (optionalProfessor.isPresent()) {
-            Professor entity = optionalProfessor.get();
-            entity.setName(request.getName());
-            repository.save(entity);
-            return mapper.toResponse(entity);
-        }
+        optionalProfessor.orElseThrow(() -> new EntityNotFoundException("Professor not found."));
 
-        return null;
+        Professor entity = optionalProfessor.get();
+        entity.setName(request.getName());
+        repository.save(entity);
+        return mapper.toResponse(entity);
     }
 
     public void delete(int id) {
