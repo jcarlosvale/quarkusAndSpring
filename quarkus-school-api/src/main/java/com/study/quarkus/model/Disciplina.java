@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Builder
@@ -24,7 +23,6 @@ public class Disciplina {
     private Integer id;
 
     @NotBlank(message = "Name must be not empty or null")
-    @Size(min = 4, message = "Minimum name length 4 characters")
     @Column(name = "disciplina_name", nullable = false)
     private String name;
 
