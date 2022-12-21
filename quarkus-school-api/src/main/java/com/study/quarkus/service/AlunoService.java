@@ -52,6 +52,8 @@ public class AlunoService {
         log.info("Getting aluno id-{}", id);
 
         var entity = repository.findById(id);
+        if (Objects.isNull(entity)) throw new EntityNotFoundException("Aluno not found");
+
         return mapper.toResponse(entity);
     }
 

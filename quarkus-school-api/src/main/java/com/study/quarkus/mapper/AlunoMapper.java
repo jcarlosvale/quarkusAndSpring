@@ -28,7 +28,7 @@ public class AlunoMapper {
 
     public AlunoResponse toResponse(Aluno entity) {
 
-        if (Objects.isNull(entity)) return null;
+        Objects.requireNonNull(entity, "entity must not be null");
 
         var formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss");
 
@@ -48,7 +48,7 @@ public class AlunoMapper {
 
     public TutorResponse toResponse(Professor entity) {
 
-        if (Objects.isNull(entity)) return null;
+        Objects.requireNonNull(entity, "entity must not be null");
 
         var formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss");
 
