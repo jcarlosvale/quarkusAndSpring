@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -40,7 +41,7 @@ public class ProfessorController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> saveProfessor(@RequestBody final ProfessorRequest professor) {
+    public ResponseEntity<Void> saveProfessor(@Valid @RequestBody final ProfessorRequest professor) {
 
         service.save(professor);
 
@@ -50,7 +51,7 @@ public class ProfessorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProfessorResponse> updateProfessor(@PathVariable("id") int id, @RequestBody ProfessorRequest professor) {
+    public ResponseEntity<ProfessorResponse> updateProfessor(@PathVariable("id") int id, @Valid @RequestBody ProfessorRequest professor) {
 
         var response = service.update(id, professor);
 

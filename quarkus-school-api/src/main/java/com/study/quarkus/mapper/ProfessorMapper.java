@@ -4,6 +4,7 @@ import com.study.quarkus.dto.ProfessorResponse;
 import com.study.quarkus.model.Professor;
 
 import javax.enterprise.context.ApplicationScoped;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -24,9 +25,11 @@ public class ProfessorMapper {
 
         Objects.requireNonNull(entity, "Entity must be not null");
 
+        var formatter = DateTimeFormatter.ofPattern("dd-MM-YYYY hh:mm:ss");
         return  ProfessorResponse.builder()
                     .id(entity.getId())
                     .name(entity.getName())
+                    .dateTime(formatter.format(entity.getDateTime()))
                     .build();
     }
 }

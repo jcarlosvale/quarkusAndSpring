@@ -1,23 +1,23 @@
 package com.study.spring.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties
-public class ProfessorRequest {
+public class ErrorMessage {
 
-    @NotBlank(message = "Name must be not empty or null")
-    @Size(min = 4, message = "Minimum name length 4 characters")
-    private String name;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String field;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String message;
 
 }
