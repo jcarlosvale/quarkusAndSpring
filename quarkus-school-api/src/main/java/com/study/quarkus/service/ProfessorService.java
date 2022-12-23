@@ -2,6 +2,7 @@ package com.study.quarkus.service;
 
 import com.study.quarkus.dto.ProfessorRequest;
 import com.study.quarkus.dto.ProfessorResponse;
+import com.study.quarkus.exception.NotAllowedNameException;
 import com.study.quarkus.mapper.ProfessorMapper;
 import com.study.quarkus.model.Professor;
 import com.study.quarkus.repository.ProfessorRepository;
@@ -43,6 +44,11 @@ public class ProfessorService {
         Objects.requireNonNull(professorRequest, "request must not be null");
 
         log.info("Saving professor - {}", professorRequest);
+
+
+        if (professorRequest.getName().equals("AAA")) {
+            throw new NotAllowedNameException("The name AAA is not allowed");
+        }
 
         Professor entity =
                 Professor.builder()
