@@ -1,6 +1,7 @@
 package com.study.spring.view.rs;
 
-import com.study.spring.dto.ProfessorDto;
+import com.study.spring.dto.ProfessorRequest;
+import com.study.spring.dto.ProfessorResponse;
 import com.study.spring.service.ProfessorService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,23 +24,23 @@ public class ProfessorController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProfessorDto>> listProfessors() {
+    public ResponseEntity<List<ProfessorResponse>> listProfessors() {
 
-        final List<ProfessorDto> professorDtoList = service.retrieveAll();
+        final List<ProfessorResponse> professorDtoList = service.retrieveAll();
 
         return ResponseEntity.ok(professorDtoList);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProfessorDto> getProfessor(@PathVariable("id") int id) {
+    public ResponseEntity<ProfessorResponse> getProfessor(@PathVariable("id") int id) {
 
-        final ProfessorDto professorDto = service.getById(id);
+        final ProfessorResponse professorDto = service.getById(id);
 
         return ResponseEntity.ok(professorDto);
     }
 
     @PostMapping
-    public ResponseEntity<Void> saveProfessor(@RequestBody final ProfessorDto professor) {
+    public ResponseEntity<Void> saveProfessor(@RequestBody final ProfessorRequest professor) {
 
         service.save(professor);
 
@@ -49,11 +50,12 @@ public class ProfessorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProfessorDto> updateProfessor(@PathVariable("id") int id, @RequestBody ProfessorDto professor) {
+    public ResponseEntity<ProfessorResponse> updateProfessor(@PathVariable("id") int id, @RequestBody ProfessorRequest professor) {
 
-        service.update(id, professor);
+        var response = service.update(id, professor);
+
         return ResponseEntity
-                .ok(professor);
+                .ok(response);
     }
 
     @DeleteMapping("/{id}")
