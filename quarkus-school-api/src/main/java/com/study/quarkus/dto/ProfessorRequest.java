@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
 @Data
 @Builder
@@ -17,7 +16,6 @@ import javax.validation.constraints.Size;
 public class ProfessorRequest {
 
     @NotBlank(message = "Name must be not empty or null")
-    @Size(min = 4, message = "Minimum name length 4 characters")
     private String name;
 
 }
