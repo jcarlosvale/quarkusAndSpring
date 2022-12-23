@@ -5,6 +5,8 @@ import com.study.quarkus.dto.ErrorResponse;
 import com.study.quarkus.service.AlunoService;
 import lombok.RequiredArgsConstructor;
 
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.validation.ConstraintViolationException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -19,6 +21,7 @@ public class AlunoResource {
     private final AlunoService service;
 
     @GET
+    @PermitAll
     public Response list() {
         final var response = service.retrieveAll();
 
@@ -26,6 +29,7 @@ public class AlunoResource {
     }
 
     @POST
+    @RolesAllowed({"Aluno", "Professor"})
     public Response save(final AlunoRequest request) {
         try {
             final var response = service.save(request);
@@ -45,6 +49,7 @@ public class AlunoResource {
 
     @GET
     @Path("/{id}")
+    @PermitAll
     public Response getById(@PathParam("id") int id) {
 
         final var response = service.getById(id);
@@ -54,6 +59,7 @@ public class AlunoResource {
 
     @PATCH
     @Path("/{id}/tutor/{idProfessor}")
+    @PermitAll
     public Response updateTitular(@PathParam("id") int idAluno, @PathParam("idProfessor") int idProfessor) {
         final var response = service.updateTutor(idAluno, idProfessor);
 
