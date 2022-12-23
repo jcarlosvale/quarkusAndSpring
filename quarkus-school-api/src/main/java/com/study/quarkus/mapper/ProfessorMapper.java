@@ -12,11 +12,11 @@ import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class ProfessorMapper {
-    public List<ProfessorResponse> toResponse(List<Professor> listOfProfessors) {
+    public List<ProfessorResponse> toResponse(List<Professor> listOfEntities) {
 
-        if (Objects.isNull(listOfProfessors)) return new ArrayList<>();
+        if (Objects.isNull(listOfEntities)) return new ArrayList<>();
 
-        return listOfProfessors.stream()
+        return listOfEntities.stream()
                 .map(this::toResponse)
                 .collect(Collectors.toList());
     }

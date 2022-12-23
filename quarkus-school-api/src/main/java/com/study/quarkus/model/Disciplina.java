@@ -29,6 +29,10 @@ public class Disciplina {
     @Column(name="data_atualizacao", nullable = false)
     private LocalDateTime dateTime;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "titular")
+    private Professor titular;
+
     @PrePersist
     public void prePersist(){
         setDateTime(LocalDateTime.now());

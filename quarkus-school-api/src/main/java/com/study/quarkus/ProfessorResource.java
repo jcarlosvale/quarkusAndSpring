@@ -2,6 +2,7 @@ package com.study.quarkus;
 
 import com.study.quarkus.dto.ErrorResponse;
 import com.study.quarkus.dto.ProfessorRequest;
+import com.study.quarkus.service.DisciplinaService;
 import com.study.quarkus.service.ProfessorService;
 import lombok.RequiredArgsConstructor;
 
@@ -17,6 +18,7 @@ import javax.ws.rs.core.Response;
 public class ProfessorResource {
 
     private final ProfessorService service;
+    private final DisciplinaService disciplinaService;
 
     @GET
     public Response listProfessors() {
@@ -81,5 +83,14 @@ public class ProfessorResource {
         return Response
                 .status(Response.Status.NO_CONTENT)
                 .build();
+    }
+
+    @GET
+    @Path("/{id}/disciplina")
+    public Response getDisciplina(@PathParam("id") int id) {
+
+        final var response = disciplinaService.getDisciplinaByProfessorId(id);
+
+        return Response.ok(response).build();
     }
 }

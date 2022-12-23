@@ -2,6 +2,7 @@ package com.study.quarkus;
 
 import com.study.quarkus.dto.ErrorMessage;
 import com.study.quarkus.exception.NotAllowedNameException;
+import com.study.quarkus.exception.InvalidStateException;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.EntityNotFoundException;
@@ -20,6 +21,14 @@ public class SchoolExceptionHandler implements ExceptionMapper<Exception> {
         if (exception instanceof EntityNotFoundException) {
             return Response
                     .status(Response.Status.NOT_FOUND)
+                    .entity(ErrorMessage.builder()
+                            .message(exception.getMessage())
+                            .build())
+                    .build();
+        }
+        if (exception instanceof InvalidStateException) {
+            return Response
+                    .status(Response.Status.CONFLICT)
                     .entity(ErrorMessage.builder()
                             .message(exception.getMessage())
                             .build())
