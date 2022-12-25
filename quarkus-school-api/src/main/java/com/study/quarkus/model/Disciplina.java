@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Builder
 @Data
@@ -33,10 +32,6 @@ public class Disciplina {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "titular")
     private Professor titular;
-
-    @ManyToMany
-    private List<Aluno> cursaram;
-
 
     @PrePersist
     public void prePersist(){
