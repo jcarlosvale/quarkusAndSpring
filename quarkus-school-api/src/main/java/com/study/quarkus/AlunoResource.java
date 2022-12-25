@@ -29,7 +29,7 @@ public class AlunoResource {
     }
 
     @POST
-    @RolesAllowed({"Aluno", "Professor"})
+    @RolesAllowed("Professor")
     public Response save(final AlunoRequest request) {
         try {
             final var response = service.save(request);

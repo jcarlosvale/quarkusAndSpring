@@ -3,7 +3,6 @@ package com.study.quarkus.service;
 import io.smallrye.jwt.build.Jwt;
 
 import javax.enterprise.context.ApplicationScoped;
-import java.util.Set;
 
 @ApplicationScoped
 public class SchoolJwtService {
@@ -12,7 +11,7 @@ public class SchoolJwtService {
         return Jwt
                 .issuer("school-jwt")
                 .subject("school-jwt")
-                .groups(Set.of("Professor", "Aluno"))
+                .groups("Professor")
                 .expiresAt(System.currentTimeMillis() + 3600)
                 .sign();
     }
