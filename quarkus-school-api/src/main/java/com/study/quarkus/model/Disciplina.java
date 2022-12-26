@@ -30,7 +30,7 @@ public class Disciplina {
     private LocalDateTime dateTime;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "titular")
+    @JoinColumn(name = "titular", unique = true)
     private Professor titular;
 
     @PrePersist

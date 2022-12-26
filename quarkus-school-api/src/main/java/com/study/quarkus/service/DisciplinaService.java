@@ -70,9 +70,9 @@ public class DisciplinaService {
         if (Objects.isNull(professor)) throw new EntityNotFoundException("Professor not found");
 
         //verify if Professor has no Disciplina
-        var query = repository.find("titular", professor);
-        if (query.count() > 0) throw new InvalidStateException("Professor must have at most one Disciplina as titular");
-
+        if (repository.countTitularidadeByProfessor(professor) > 0) {
+            throw new InvalidStateException("Professor must have at most one Disciplina as titular");
+        }
 
         //Update
         disciplina.setTitular(professor);
