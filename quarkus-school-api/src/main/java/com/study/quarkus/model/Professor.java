@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Builder
 @Data
@@ -31,6 +32,9 @@ public class Professor {
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "titular")
     private Disciplina disciplina;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "tutor")
+    private List<Aluno> alunos;
 
     @PrePersist
     public void prePersist(){

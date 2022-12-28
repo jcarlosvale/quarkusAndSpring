@@ -25,6 +25,10 @@ public class Aluno {
     @Column(name = "aluno_name", nullable = false)
     private String name;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tutor")
+    private Professor tutor;
+
     @Column(name="data_atualizacao", nullable = false)
     private LocalDateTime dateTime;
 
