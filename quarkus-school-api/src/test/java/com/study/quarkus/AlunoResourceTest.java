@@ -163,6 +163,8 @@ class AlunoResourceTest {
 
         assertThat(mapper.toResponse(repository.findById(dto.getId())))
                 .isEqualTo(dto);
+
+        assertThat(dto.getId()).isEqualTo(entityOne.getId());
     }
 
 }
