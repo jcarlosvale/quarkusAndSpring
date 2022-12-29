@@ -50,6 +50,7 @@ class AlunoResourceTest {
                 given()
                         .contentType(ContentType.JSON)
                 .when()
+                        .auth().basic("aluno", "alunopassword")
                         .get("/alunos")
                 .then()
                         .extract()
@@ -94,6 +95,7 @@ class AlunoResourceTest {
                         .contentType(ContentType.JSON)
                         .body(request)
                 .when()
+                        .auth().basic("aluno", "alunopassword")
                         .post("/alunos")
                 .then()
                         .extract()
@@ -121,12 +123,13 @@ class AlunoResourceTest {
                 .build();
 
         var response =
-                given()
+                    given()
                         .contentType(ContentType.JSON)
                         .body(request)
-                        .when()
+                    .when()
+                        .auth().basic("aluno", "alunopassword")
                         .post("/alunos")
-                        .then()
+                    .then()
                         .extract()
                         .response();
 
@@ -150,10 +153,11 @@ class AlunoResourceTest {
         var response =
                 given()
                 .when()
+                    .auth().basic("aluno", "alunopassword")
                     .get("/alunos/" + entityOne.getId())
-                        .then()
-                        .extract()
-                        .response();
+                .then()
+                    .extract()
+                    .response();
 
         var dto = response.getBody().as(AlunoResponse.class);
 
